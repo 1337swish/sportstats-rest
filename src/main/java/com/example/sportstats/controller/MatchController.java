@@ -26,7 +26,7 @@ import org.springframework.web.server.ResponseStatusException;
 public class MatchController {
 
     @GetMapping("/matches")
-    public String getMatches(@RequestParam(required = false) Integer id, @RequestParam(required = false) Integer roundid, @RequestParam(required = false) Integer seasonid, @RequestParam(required = false) Integer sportid, @RequestParam(defaultValue = "false") Boolean overtime, @RequestParam(required = false) Integer arenaid, @RequestParam(required = false) Integer teamid, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate datefrom, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateto) {
+    public String getMatches(@RequestParam(required = false) Integer id, @RequestParam(required = false) Integer roundid, @RequestParam(required = false) Integer seasonid, @RequestParam(required = false) Integer sportid, @RequestParam(defaultValue = "false") Boolean overtime, @RequestParam(required = false) Integer arenaid, @RequestParam(required = false) Integer teamid, @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date, @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate datefrom, @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateto) {
 
         try {
             return new ServiceRunner(new GetMatchesService(id, roundid, seasonid, sportid, overtime, arenaid, teamid, date, datefrom, dateto)).execute();

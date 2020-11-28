@@ -4,6 +4,7 @@ import com.example.sportstats.domain.Season;
 import com.example.sportstats.domain.SeasonTeam;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.http.HttpStatus;
 
 /**
  *
@@ -35,6 +36,11 @@ public class GetSeasonTeamService extends BaseService<List<SeasonTeam>> {
                     .filter(s -> s.getSeasonId().equals(seasonId))
                     .collect(Collectors.toList());
         }
+        
+        if (seasonTeams.isEmpty()) {
+            throw new SportstatsServiceException("There are no seasonTeams", HttpStatus.NOT_FOUND);
+        }
+        
         seasonTeams.forEach(s -> {
             Season season = getBrokerFactory().getSeasonBroker().findById(s.getSeasonId());
             if (season.getStartYear().equals(season.getEndYear())) {

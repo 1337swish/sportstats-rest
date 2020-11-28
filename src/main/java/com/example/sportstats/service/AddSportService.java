@@ -1,6 +1,7 @@
 package com.example.sportstats.service;
 
 import com.example.sportstats.domain.Sport;
+import org.springframework.http.HttpStatus;
 
 /**
  * Service that adds a new sport.
@@ -19,7 +20,7 @@ public class AddSportService extends BaseService<Sport> {
     public AddSportService(String sportName, Integer win, Integer winot, Integer draw, Integer loss, Integer lossot) {
 
         if (sportName.isEmpty() || sportName.isBlank()) {
-            throw new SportstatsServiceException("Sport name can't be empty");
+            throw new SportstatsServiceException("Sport name can't be empty", HttpStatus.BAD_REQUEST);
         }
         this.sportName = sportName;
         this.win = win;
@@ -33,7 +34,7 @@ public class AddSportService extends BaseService<Sport> {
     public Sport execute() {
 
         if (getBrokerFactory().getSportBroker().exists(sportName)) {
-            throw new SportstatsServiceException("Sport already exists");
+            throw new SportstatsServiceException("Sport already exists", HttpStatus.BAD_REQUEST);
         }
         Sport sport = getBrokerFactory().getSportBroker().create();
         sport.setName(sportName);

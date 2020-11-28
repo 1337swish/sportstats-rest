@@ -3,6 +3,7 @@ package com.example.sportstats.service;
 import com.example.sportstats.domain.Season;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.http.HttpStatus;
 
 /**
  *
@@ -31,6 +32,10 @@ public class GetSeasonsService extends BaseService<List<Season>> {
             seasons = seasons.stream()
                     .filter(season -> season.getLeagueId().equals(leagueId))
                     .collect(Collectors.toList());
+        }
+
+        if (seasons.isEmpty()) {
+            throw new SportstatsServiceException("There are no seasons", HttpStatus.NOT_FOUND);
         }
 
         return seasons;

@@ -3,6 +3,7 @@ package com.example.sportstats.service;
 import com.example.sportstats.domain.Season;
 import com.example.sportstats.domain.SeasonTeam;
 import com.example.sportstats.domain.Team;
+import org.springframework.http.HttpStatus;
 
 /**
  * Service that edits an existing seasonTeam.
@@ -26,28 +27,31 @@ public class EditSeasonTeamService extends BaseService<SeasonTeam> {
     public SeasonTeam execute() {
 
         SeasonTeam seasonTeam = getBrokerFactory().getSeasonsTeamsBroker().findById(id);
-        Team team = getBrokerFactory().getTeamBroker().findById(teamId);
-        Season season = getBrokerFactory().getSeasonBroker().findById(seasonId);
         if (seasonTeam == null) {
-            throw new SportstatsServiceException("There are no seasonTeam with id: " + id);
+            throw new SportstatsServiceException("There are no seasonTeam with id: " + id, HttpStatus.NOT_FOUND);
         }
-        if (team == null) {
-            throw new SportstatsServiceException("There are no team with id: " + teamId);
-        } else {
-            seasonTeam.setTeamId(teamId);
-            seasonTeam.setTeamName(team.getName());
-        }
-        if (season == null) {
-            throw new SportstatsServiceException("There are no season with id: " + seasonId);
-        } else {
-            seasonTeam.setSeasonId(seasonId);
-            if (season.getStartYear().equals(season.getEndYear())) {
-                seasonTeam.setSeasonName(season.getStartYear().toString());
+        if (teamId != null) {
+            Team team = getBrokerFactory().getTeamBroker().findById(teamId);
+            if (team == null) {
+                throw new SportstatsServiceException("There are no team with id: " + teamId, HttpStatus.NOT_FOUND);
             } else {
-                seasonTeam.setSeasonName(season.getStartYear() + "/" + season.getEndYear());
+                seasonTeam.setTeamId(teamId);
+                seasonTeam.setTeamName(team.getName());
             }
         }
-
+        if (seasonId != null) {
+            Season season = getBrokerFactory().getSeasonBroker().findById(seasonId);
+            if (season == null) {
+                throw new SportstatsServiceException("There are no season with id: " + seasonId, HttpStatus.NOT_FOUND);
+            } else {
+                seasonTeam.setSeasonId(seasonId);
+                if (season.getStartYear().equals(season.getEndYear())) {
+                    seasonTeam.setSeasonName(season.getStartYear().toString());
+                } else {
+                    seasonTeam.setSeasonName(season.getStartYear() + "/" + season.getEndYear());
+                }
+            }
+        }
         seasonTeam.save();
 
         return seasonTeam;

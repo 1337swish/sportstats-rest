@@ -4,6 +4,7 @@ import com.example.sportstats.domain.SeasonTeam;
 import com.example.sportstats.domain.Team;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.http.HttpStatus;
 
 /**
  *
@@ -44,10 +45,15 @@ public class GetTeamsService extends BaseService<List<Team>> {
             teams = teams.stream()
                     .filter(team -> team.getSportId().equals(sportId))
                     .collect(Collectors.toList());
-        } else if (arenaId != null) {
+        }
+        if (arenaId != null) {
             teams = teams.stream()
                     .filter(team -> team.getArenaId().equals(arenaId))
                     .collect(Collectors.toList());
+        }
+
+        if (teams.isEmpty()) {
+            throw new SportstatsServiceException("There are no teams", HttpStatus.NOT_FOUND);
         }
 
         return teams;

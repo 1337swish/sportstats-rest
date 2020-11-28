@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import org.springframework.http.HttpStatus;
 
 /**
  *
@@ -31,14 +32,10 @@ public class GetStandingsService extends BaseService<List<StandingsPost>> {
     public List<StandingsPost> execute() {
 
         List<Match> matches = getBrokerFactory().getMatchBroker().findAll();
-        if (matches.isEmpty()) {
-            return new ArrayList();
-        }
 
-        // Only get played matches
-        matches = matches.stream()
-                .filter(match -> match.getAttendance() != null)
-                .collect(Collectors.toList());
+        if (matches.isEmpty()) {
+            throw new SportstatsServiceException("There are no matches to show standings for", HttpStatus.NOT_FOUND);
+        }
 
         if (teamId != null) {
             matches = matches.stream()
@@ -49,6 +46,15 @@ public class GetStandingsService extends BaseService<List<StandingsPost>> {
             matches = matches.stream()
                     .filter(match -> match.getSeasonId().equals(seasonId))
                     .collect(Collectors.toList());
+        }
+
+        // Only get played matches
+        matches = matches.stream()
+                .filter(match -> match.getAttendance() != null)
+                .collect(Collectors.toList());
+
+        if (matches.isEmpty()) {
+            throw new SportstatsServiceException("There are no matches to show standings for", HttpStatus.NOT_FOUND);
         }
 
         Sport sport = getBrokerFactory().getSportBroker().findById(matches.get(0).getSportId());

@@ -2,6 +2,7 @@ package com.example.sportstats.service;
 
 import com.example.sportstats.domain.Round;
 import com.example.sportstats.domain.Season;
+import org.springframework.http.HttpStatus;
 
 /**
  * Service that adds a new season.
@@ -19,9 +20,9 @@ public class AddSeasonService extends BaseService<Season> {
     public AddSeasonService(Integer leagueId, Integer startYear, Integer endYear, Integer rounds, Boolean autoAddRounds) {
 
         if (rounds < 1) {
-            throw new SportstatsServiceException("There can't be less than 1 round in a league");
+            throw new SportstatsServiceException("There can't be less than 1 round in a league", HttpStatus.BAD_REQUEST);
         } else if (startYear > endYear) {
-            throw new SportstatsServiceException("The starting year can't be after the ending year!");
+            throw new SportstatsServiceException("The starting year can't be after the ending year!", HttpStatus.BAD_REQUEST);
         }
         this.leagueId = leagueId;
         this.startYear = startYear;
@@ -34,7 +35,7 @@ public class AddSeasonService extends BaseService<Season> {
     public Season execute() {
 
         if (getBrokerFactory().getLeagueBroker().findById(leagueId) == null) {
-            throw new SportstatsServiceException("There are no league with id: " + leagueId);
+            throw new SportstatsServiceException("There are no league with id: " + leagueId, HttpStatus.NOT_FOUND);
         }
         Season season = getBrokerFactory().getSeasonBroker().create();
         season.setLeagueId(leagueId);

@@ -1,6 +1,7 @@
 package com.example.sportstats.service;
 
 import com.example.sportstats.domain.Sport;
+import org.springframework.http.HttpStatus;
 
 /**
  * Service that edits an existing sport.
@@ -20,7 +21,7 @@ public class EditSportService extends BaseService<Sport> {
     public EditSportService(Integer id, String name, Integer win, Integer winot, Integer draw, Integer loss, Integer lossot) {
 
         if (name != null && (name.isEmpty() || name.isBlank())) {
-            throw new SportstatsServiceException("Sport name can't be empty");
+            throw new SportstatsServiceException("Sport name can't be empty", HttpStatus.BAD_REQUEST);
         }
         this.id = id;
         this.name = name;
@@ -36,7 +37,7 @@ public class EditSportService extends BaseService<Sport> {
 
         Sport sport = getBrokerFactory().getSportBroker().findById(id);
         if (sport == null) {
-            throw new SportstatsServiceException("There are no sport with id: " + id);
+            throw new SportstatsServiceException("There are no sport with id: " + id, HttpStatus.NOT_FOUND);
         }
         if (name != null) {
             sport.setName(name);

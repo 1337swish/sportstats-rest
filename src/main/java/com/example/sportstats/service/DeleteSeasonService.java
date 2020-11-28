@@ -3,6 +3,7 @@ package com.example.sportstats.service;
 import com.example.sportstats.domain.Season;
 import java.util.HashMap;
 import java.util.Map;
+import org.springframework.http.HttpStatus;
 
 /**
  * Service that deletes seasons.
@@ -23,7 +24,7 @@ public class DeleteSeasonService extends BaseService<Map> {
 
         Season season = getBrokerFactory().getSeasonBroker().findById(id);
         if (season == null) {
-            throw new SportstatsServiceException("There are no sport with id: " + id);
+            throw new SportstatsServiceException("There are no sport with id: " + id, HttpStatus.NOT_FOUND);
         }
         Map deletedSeason = new HashMap();
         deletedSeason.put("id", season.getId());

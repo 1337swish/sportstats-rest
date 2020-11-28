@@ -3,6 +3,7 @@ package com.example.sportstats.service;
 import com.example.sportstats.domain.Round;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.http.HttpStatus;
 
 /**
  *
@@ -32,6 +33,10 @@ public class GetRoundsService extends BaseService<List<Round>> {
             rounds = rounds.stream()
                     .filter(round -> round.getSeasonId().equals(seasonId))
                     .collect(Collectors.toList());
+        }
+        
+        if (rounds.isEmpty()) {
+            throw new SportstatsServiceException("There are no rounds", HttpStatus.NOT_FOUND);
         }
 
         return rounds;

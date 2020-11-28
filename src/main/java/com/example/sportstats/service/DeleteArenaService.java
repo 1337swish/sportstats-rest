@@ -3,6 +3,7 @@ package com.example.sportstats.service;
 import com.example.sportstats.domain.Arena;
 import java.util.HashMap;
 import java.util.Map;
+import org.springframework.http.HttpStatus;
 
 /**
  * Service that deletes arenas.
@@ -23,7 +24,7 @@ public class DeleteArenaService extends BaseService<Map> {
 
         Arena arena = getBrokerFactory().getArenaBroker().findById(id);
         if (arena == null) {
-            throw new SportstatsServiceException("There are no arena with id: " + id);
+            throw new SportstatsServiceException("There are no arena with id: " + id, HttpStatus.NOT_FOUND);
         }
         Map deletedArena = new HashMap();
         deletedArena.put("id", arena.getId());

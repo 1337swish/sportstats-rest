@@ -3,6 +3,7 @@ package com.example.sportstats.service;
 import com.example.sportstats.domain.Team;
 import java.util.HashMap;
 import java.util.Map;
+import org.springframework.http.HttpStatus;
 
 /**
  * Service that deletes teams.
@@ -23,7 +24,7 @@ public class DeleteTeamService extends BaseService<Map> {
 
         Team team = getBrokerFactory().getTeamBroker().findById(id);
         if (team == null) {
-            throw new SportstatsServiceException("There are no team with id: " + id);
+            throw new SportstatsServiceException("There are no team with id: " + id, HttpStatus.NOT_FOUND);
         }
         Map deletedTeam = new HashMap();
         deletedTeam.put("id", team.getId());

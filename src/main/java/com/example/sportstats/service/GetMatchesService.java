@@ -4,6 +4,7 @@ import com.example.sportstats.domain.Match;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.http.HttpStatus;
 
 /**
  *
@@ -87,6 +88,10 @@ public class GetMatchesService extends BaseService<List<Match>> {
             matches = matches.stream()
                     .filter(match -> match.getHomeTeamId().equals(teamId) || match.getAwayTeamId().equals(teamId))
                     .collect(Collectors.toList());
+        }
+
+        if (matches.isEmpty()) {
+            throw new SportstatsServiceException("There are no matches", HttpStatus.NOT_FOUND);
         }
 
         matches.forEach(m -> {

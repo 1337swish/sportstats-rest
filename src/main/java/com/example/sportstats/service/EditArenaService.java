@@ -1,6 +1,7 @@
 package com.example.sportstats.service;
 
 import com.example.sportstats.domain.Arena;
+import org.springframework.http.HttpStatus;
 
 /**
  * Service that edits an existing arena.
@@ -17,11 +18,11 @@ public class EditArenaService extends BaseService<Arena> {
     public EditArenaService(Integer id, String name, String address, Integer capacity) {
 
         if (name != null && (name.isEmpty() || name.isBlank())) {
-            throw new SportstatsServiceException("Arena name can't be empty");
+            throw new SportstatsServiceException("Arena name can't be empty", HttpStatus.BAD_REQUEST);
         } else if (address != null && (address.isEmpty() || address.isBlank())) {
-            throw new SportstatsServiceException("Address cant be empty");
+            throw new SportstatsServiceException("Address cant be empty", HttpStatus.BAD_REQUEST);
         } else if (capacity != null && capacity < 0) {
-            throw new SportstatsServiceException("Arena capacity can't be less than 0");
+            throw new SportstatsServiceException("Arena capacity can't be less than 0", HttpStatus.BAD_REQUEST);
         }
         this.id = id;
         this.name = name;
@@ -34,7 +35,7 @@ public class EditArenaService extends BaseService<Arena> {
 
         Arena arena = getBrokerFactory().getArenaBroker().findById(id);
         if (arena == null) {
-            throw new SportstatsServiceException("There are no arena with id: " + id);
+            throw new SportstatsServiceException("There are no arena with id: " + id, HttpStatus.NOT_FOUND);
         }
         if (name != null) {
             arena.setName(name);

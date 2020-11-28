@@ -3,6 +3,7 @@ package com.example.sportstats.service;
 import com.example.sportstats.domain.Arena;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.http.HttpStatus;
 
 /**
  *
@@ -28,6 +29,9 @@ public class GetArenasService extends BaseService<List<Arena>> {
                     .collect(Collectors.toList());
         }
 
+        if (arenas.isEmpty()) {
+            throw new SportstatsServiceException("There are no arenas", HttpStatus.NOT_FOUND);
+        }
         return arenas;
     }
 }

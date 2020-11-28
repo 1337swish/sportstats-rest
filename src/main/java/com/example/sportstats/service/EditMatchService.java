@@ -4,9 +4,9 @@ import com.example.sportstats.domain.Arena;
 import com.example.sportstats.domain.Match;
 import com.example.sportstats.domain.Round;
 import com.example.sportstats.domain.Season;
-import com.example.sportstats.domain.Sport;
 import com.example.sportstats.domain.Team;
 import java.time.LocalDate;
+import org.springframework.http.HttpStatus;
 
 /**
  * Service that edits an existing match.
@@ -28,16 +28,16 @@ public class EditMatchService extends BaseService<Match> {
     private final Integer attendance;
     private final Boolean overtime;
 
-    public EditMatchService(Integer matchId, Integer homeTeamId, Integer awayTeamId, Integer arenaId, Integer roundId, Integer seasonId, Integer sportId, Integer homeTeamScore, Integer awayTeamScore, LocalDate date, Integer attendance, Boolean overtime) throws SportstatsServiceException {
+    public EditMatchService(Integer matchId, Integer homeTeamId, Integer awayTeamId, Integer arenaId, Integer roundId, Integer seasonId, Integer sportId, Integer homeTeamScore, Integer awayTeamScore, LocalDate date, Integer attendance, Boolean overtime) {
 
         if (homeTeamScore != null && homeTeamScore < 0) {
-            throw new SportstatsServiceException("Home score can't be less than 0");
+            throw new SportstatsServiceException("Home score can't be less than 0", HttpStatus.BAD_REQUEST);
         } else if (awayTeamScore != null && awayTeamScore < 0) {
-            throw new SportstatsServiceException("Away score can't be less than 0");
+            throw new SportstatsServiceException("Away score can't be less than 0", HttpStatus.BAD_REQUEST);
         } else if (attendance != null && attendance < 0) {
-            throw new SportstatsServiceException("Attendance can't be less than 0");
+            throw new SportstatsServiceException("Attendance can't be less than 0", HttpStatus.BAD_REQUEST);
         } else if (homeTeamId.equals(awayTeamId)) {
-            throw new SportstatsServiceException("Home and away teams can't be the same");
+            throw new SportstatsServiceException("Home and away teams can't be the same", HttpStatus.BAD_REQUEST);
         }
 
         this.matchId = matchId;
@@ -58,48 +58,57 @@ public class EditMatchService extends BaseService<Match> {
     public Match execute() {
 
         Match match = getBrokerFactory().getMatchBroker().findById(matchId);
-        Sport sport = getBrokerFactory().getSportBroker().findById(sportId);
-        Team homeTeam = getBrokerFactory().getTeamBroker().findById(homeTeamId);
-        Team awayTeam = getBrokerFactory().getTeamBroker().findById(awayTeamId);
-        Arena arena = getBrokerFactory().getArenaBroker().findById(arenaId);
-        Round round = getBrokerFactory().getRoundBroker().findById(roundId);
-        Season season = getBrokerFactory().getSeasonBroker().findById(seasonId);
 
         if (match == null) {
-            throw new SportstatsServiceException("There are no match with id: " + matchId);
+            throw new SportstatsServiceException("There are no match with id: " + matchId, HttpStatus.NOT_FOUND);
         }
-        if (sport != null) {
-            match.setSportId(sportId);
-        } else {
-            throw new SportstatsServiceException("There are no sport with id: " + sportId);
+        if (sportId != null) {
+            if (getBrokerFactory().getSportBroker().findById(sportId) == null) {
+                throw new SportstatsServiceException("There are no sport with id: " + sportId, HttpStatus.NOT_FOUND);
+            } else {
+                match.setSportId(sportId);
+            }
         }
-        if (homeTeam != null) {
-            match.setHomeTeamId(homeTeamId);
-            match.setHomeTeamName(homeTeam.getName());
-        } else {
-            throw new SportstatsServiceException("There are no team with id: " + homeTeamId);
+        if (homeTeamId != null) {
+            Team homeTeam = getBrokerFactory().getTeamBroker().findById(homeTeamId);
+            if (homeTeam == null) {
+                throw new SportstatsServiceException("There are no team with id: " + homeTeamId, HttpStatus.NOT_FOUND);
+            } else {
+                match.setHomeTeamId(homeTeamId);
+                match.setHomeTeamName(homeTeam.getName());
+            }
         }
-        if (awayTeam != null) {
-            match.setAwayTeamId(awayTeamId);
-            match.setAwayTeamName(awayTeam.getName());
-        } else {
-            throw new SportstatsServiceException("There are no team with id: " + awayTeamId);
+        if (awayTeamId != null) {
+            Team awayTeam = getBrokerFactory().getTeamBroker().findById(awayTeamId);
+            if (awayTeam == null) {
+                throw new SportstatsServiceException("There are no team with id: " + awayTeamId, HttpStatus.NOT_FOUND);
+            } else {
+                match.setAwayTeamId(awayTeamId);
+                match.setAwayTeamName(awayTeam.getName());
+            }
         }
-        if (arena != null) {
-            match.setArenaId(arenaId);
-            match.setArenaName(getBrokerFactory().getArenaBroker().findById(arenaId).getName());
-        } else {
-            throw new SportstatsServiceException("There are no arena with id: " + arenaId);
+        if (arenaId != null) {
+            Arena arena = getBrokerFactory().getArenaBroker().findById(arenaId);
+            if (arena == null) {
+                throw new SportstatsServiceException("There are no arena with id: " + arenaId, HttpStatus.NOT_FOUND);
+            } else {
+                match.setArenaId(arenaId);
+                match.setArenaName(getBrokerFactory().getArenaBroker().findById(arenaId).getName());
+            }
         }
-        if (round != null) {
-            match.setRoundId(roundId);
-        } else {
-            throw new SportstatsServiceException("There are no round with id: " + roundId);
+        if (roundId != null) {
+            if (getBrokerFactory().getRoundBroker().findById(roundId) == null) {
+                throw new SportstatsServiceException("There are no round with id: " + roundId, HttpStatus.NOT_FOUND);
+            } else {
+                match.setRoundId(roundId);
+            }
         }
-        if (season != null) {
-            match.setSeasonId(seasonId);
-        } else {
-            throw new SportstatsServiceException("There are no season with id: " + seasonId);
+        if (seasonId != null) {
+            if (getBrokerFactory().getSeasonBroker().findById(seasonId) == null) {
+                throw new SportstatsServiceException("There are no season with id: " + seasonId, HttpStatus.NOT_FOUND);
+            } else {
+                match.setSeasonId(seasonId);
+            }
         }
         if (homeTeamScore != null) {
             match.setHomeTeamScore(homeTeamScore);

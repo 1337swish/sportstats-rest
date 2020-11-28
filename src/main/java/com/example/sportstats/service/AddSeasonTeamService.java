@@ -3,6 +3,7 @@ package com.example.sportstats.service;
 import com.example.sportstats.domain.Season;
 import com.example.sportstats.domain.SeasonTeam;
 import com.example.sportstats.domain.Team;
+import org.springframework.http.HttpStatus;
 
 /**
  * Service that adds a new seasonTeam.
@@ -14,7 +15,7 @@ public class AddSeasonTeamService extends BaseService<SeasonTeam> {
     private final Integer teamId;
     private final Integer seasonId;
 
-    public AddSeasonTeamService(Integer teamId, Integer seasonId) throws SportstatsServiceException {
+    public AddSeasonTeamService(Integer teamId, Integer seasonId) {
 
         this.teamId = teamId;
         this.seasonId = seasonId;
@@ -27,11 +28,11 @@ public class AddSeasonTeamService extends BaseService<SeasonTeam> {
         Season season = getBrokerFactory().getSeasonBroker().findById(seasonId);
 
         if (team == null) {
-            throw new SportstatsServiceException("There are no team with id: " + teamId);
+            throw new SportstatsServiceException("There are no team with id: " + teamId, HttpStatus.NOT_FOUND);
         } else if (season == null) {
-            throw new SportstatsServiceException("There are no season with id: " + seasonId);
+            throw new SportstatsServiceException("There are no season with id: " + seasonId, HttpStatus.NOT_FOUND);
         } else if (getBrokerFactory().getSeasonsTeamsBroker().findBySeasonId(seasonId).stream().anyMatch(s -> s.getTeamId().equals(teamId))) {
-            throw new SportstatsServiceException("This team is already connected to this season");
+            throw new SportstatsServiceException("This team is already connected to this season", HttpStatus.BAD_REQUEST);
         }
 
         SeasonTeam seasonTeam = getBrokerFactory().getSeasonsTeamsBroker().create();

@@ -55,6 +55,10 @@ public class EditTeamService extends BaseService<Team> {
         if (createdYear != null) {
             team.setCreatedYear(createdYear);
         }
+        
+        team.setSportName(getBrokerFactory().getSportBroker().findById(sportId).getName());
+        team.setArenaName(getBrokerFactory().getArenaBroker().findById(arenaId).getName());
+        
         team.save();
 
         return team;

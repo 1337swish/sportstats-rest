@@ -10,6 +10,8 @@ import com.example.sportstats.record.TeamRecord;
 public class Team {
 
     private TeamRecord theRecord;
+    private String arenaName;
+    private String sportName;
 
     public Team() {
 
@@ -75,6 +77,26 @@ public class Team {
 
         return theRecord.getInteger("arena_id");
     }
+    
+    /**
+     * Set the name of the arena this team belongs to.
+     *
+     * @param name the name of the arena.
+     */
+    public void setArenaName(String name) {
+
+        this.arenaName = name;
+    }
+
+    /**
+     * Get the name of the arena this team belongs to.
+     *
+     * @return name of the arena this team belongs to.
+     */
+    public String getArenaName() {
+
+        return this.arenaName;
+    }
 
     /**
      * Set the id of the sport this team belongs to.
@@ -94,6 +116,26 @@ public class Team {
     public Integer getSportId() {
 
         return theRecord.getInteger("sport_id");
+    }
+    
+    /**
+     * Set the name of the sport this team belongs to.
+     *
+     * @param name the name of the sport.
+     */
+    public void setSportName(String name) {
+
+        this.sportName = name;
+    }
+
+    /**
+     * Get the name of the sport this team belongs to.
+     *
+     * @return name of the sport this team belongs to.
+     */
+    public String getSportName() {
+
+        return this.sportName;
     }
 
     /**

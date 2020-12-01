@@ -39,6 +39,8 @@ public class AddTeamService extends BaseService<Team> {
         team.setSportId(sportId);
         team.setArenaId(arenaId);
         team.setCreatedYear(createdYear);
+        team.setSportName(getBrokerFactory().getSportBroker().findById(sportId).getName());
+        team.setArenaName(getBrokerFactory().getArenaBroker().findById(arenaId).getName());
         team.save();
 
         return team;

@@ -32,6 +32,8 @@ public class DeleteTeamService extends BaseService<Map> {
         deletedTeam.put("arenaId", team.getArenaId());
         deletedTeam.put("sportId", team.getSportId());
         deletedTeam.put("createdYear", team.getCreatedYear());
+        deletedTeam.put("sportName", getBrokerFactory().getSportBroker().findById(team.getSportId()).getName());
+        deletedTeam.put("arenaName", getBrokerFactory().getArenaBroker().findById(team.getArenaId()).getName());
         team.delete();
 
         return deletedTeam;

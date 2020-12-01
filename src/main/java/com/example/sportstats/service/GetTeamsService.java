@@ -56,6 +56,11 @@ public class GetTeamsService extends BaseService<List<Team>> {
             throw new SportstatsServiceException("There are no teams", HttpStatus.NOT_FOUND);
         }
 
+        teams.forEach(t -> {
+            t.setSportName(getBrokerFactory().getSportBroker().findById(sportId).getName());
+            t.setArenaName(getBrokerFactory().getArenaBroker().findById(arenaId).getName());
+        });
+
         return teams;
     }
 }

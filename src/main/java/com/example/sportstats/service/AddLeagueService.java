@@ -39,6 +39,7 @@ public class AddLeagueService extends BaseService<League> {
         league.setName(leagueName);
         league.setSportId(sportId);
         league.setCountry(country);
+        league.setSportName(getBrokerFactory().getSportBroker().findById(sportId).getName());
         league.save();
 
         return league;

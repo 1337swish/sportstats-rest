@@ -10,6 +10,7 @@ import com.example.sportstats.record.LeagueRecord;
 public class League {
 
     private LeagueRecord theRecord;
+    private String sportName;
 
     public League() {
 
@@ -95,7 +96,27 @@ public class League {
 
         return theRecord.getString("country");
     }
-    
+
+    /**
+     * Set the sport name.
+     *
+     * @param name the name of the sport.
+     */
+    public void setSportName(String name) {
+
+        this.sportName = name;
+    }
+
+    /**
+     * Get the sport name.
+     *
+     * @return the name of the sport.
+     */
+    public String getSportName() {
+
+        return this.sportName;
+    }
+
     /**
      * Saves this league to the database.
      */

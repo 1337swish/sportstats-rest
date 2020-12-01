@@ -37,6 +37,8 @@ public class GetLeaguesService extends BaseService<List<League>> {
         if (leagues.isEmpty()) {
             throw new SportstatsServiceException("There are no leagues", HttpStatus.NOT_FOUND);
         }
+
+        leagues.forEach(l -> l.setSportName(getBrokerFactory().getSportBroker().findById(sportId).getName()));
         return leagues;
     }
 }

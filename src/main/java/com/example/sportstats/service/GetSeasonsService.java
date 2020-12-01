@@ -38,6 +38,8 @@ public class GetSeasonsService extends BaseService<List<Season>> {
             throw new SportstatsServiceException("There are no seasons", HttpStatus.NOT_FOUND);
         }
 
+        seasons.forEach(s -> s.setLeagueName(getBrokerFactory().getLeagueBroker().findById(leagueId).getName()));
+
         return seasons;
     }
 }

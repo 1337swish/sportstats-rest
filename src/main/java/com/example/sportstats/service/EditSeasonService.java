@@ -53,6 +53,7 @@ public class EditSeasonService extends BaseService<Season> {
         if (rounds != null) {
             season.setNbrOfRounds(rounds);
         }
+        season.setLeagueName(getBrokerFactory().getLeagueBroker().findById(leagueId).getName());
         season.save();
 
         return season;

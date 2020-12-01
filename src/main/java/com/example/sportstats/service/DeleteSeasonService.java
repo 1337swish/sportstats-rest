@@ -32,6 +32,7 @@ public class DeleteSeasonService extends BaseService<Map> {
         deletedSeason.put("startYear", season.getStartYear());
         deletedSeason.put("endYear", season.getEndYear());
         deletedSeason.put("nbrOfRounds", season.getNbrOfRounds());
+        deletedSeason.put("leagueName", getBrokerFactory().getLeagueBroker().findById(season.getId()).getName());
         season.delete();
 
         return deletedSeason;

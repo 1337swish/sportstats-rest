@@ -10,6 +10,7 @@ import com.example.sportstats.record.SeasonRecord;
 public class Season {
 
     private SeasonRecord theRecord;
+    private String leagueName;
 
     public Season() {
 
@@ -117,7 +118,29 @@ public class Season {
         theRecord.setInteger("rounds", nbrOfRounds);
 
     }
-    
+
+    /**
+     * Get the name of the league.
+     *
+     * @return the name of the league.
+     */
+    public String getLeagueName() {
+
+        return this.leagueName;
+
+    }
+
+    /**
+     * Set the name of the league.
+     *
+     * @param name the name of the league.
+     */
+    public void setLeagueName(String name) {
+
+        this.leagueName = name;
+
+    }
+
     /**
      * Saves this season to the database.
      */

@@ -42,6 +42,7 @@ public class AddSeasonService extends BaseService<Season> {
         season.setStartYear(startYear);
         season.setEndYear(endYear);
         season.setNbrOfRounds(rounds);
+        season.setLeagueName(getBrokerFactory().getLeagueBroker().findById(leagueId).getName());
         season.save();
 
         if (autoAddRounds) {

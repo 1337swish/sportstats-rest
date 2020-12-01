@@ -57,8 +57,8 @@ public class GetTeamsService extends BaseService<List<Team>> {
         }
 
         teams.forEach(t -> {
-            t.setSportName(getBrokerFactory().getSportBroker().findById(sportId).getName());
-            t.setArenaName(getBrokerFactory().getArenaBroker().findById(arenaId).getName());
+            t.setSportName(getBrokerFactory().getSportBroker().findById(t.getSportId()).getName());
+            t.setArenaName(getBrokerFactory().getArenaBroker().findById(t.getArenaId()).getName());
         });
 
         return teams;

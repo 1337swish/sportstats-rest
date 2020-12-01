@@ -48,7 +48,7 @@ public class EditLeagueService extends BaseService<League> {
         if (country != null) {
             league.setCountry(country);
         }
-        league.setSportName(getBrokerFactory().getSportBroker().findById(sportId).getName());
+        league.setSportName(getBrokerFactory().getSportBroker().findById(league.getSportId()).getName());
         league.save();
 
         return league;

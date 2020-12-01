@@ -38,7 +38,7 @@ public class GetLeaguesService extends BaseService<List<League>> {
             throw new SportstatsServiceException("There are no leagues", HttpStatus.NOT_FOUND);
         }
 
-        leagues.forEach(l -> l.setSportName(getBrokerFactory().getSportBroker().findById(sportId).getName()));
+        leagues.forEach(l -> l.setSportName(getBrokerFactory().getSportBroker().findById(l.getSportId()).getName()));
         return leagues;
     }
 }
